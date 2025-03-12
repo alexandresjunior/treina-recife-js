@@ -1,8 +1,9 @@
 import './App.css';
+import Cadastro from './paginas/Cadastro';
 
 function App() {
   return (
-    <h1>Hello, world!</h1>
+    <Cadastro />
   );
 }
 
