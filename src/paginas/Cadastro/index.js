@@ -2,6 +2,7 @@ import { useState } from "react";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import { UFs } from "../../constantes/ufs";
+import Modal from "../../componentes/Modal";
 
 function Cadastro() {
     const [nome, setNome] = useState("");
@@ -15,6 +16,7 @@ function Cadastro() {
     const [cidade, setCidade] = useState("");
     const [uf, setUf] = useState("DEFAULT");
     const [complemento, setComplemento] = useState("");
+    const [exibirModal, setExibirModal] = useState(false);
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -32,6 +34,8 @@ function Cadastro() {
             uf,
             complemento
         });
+
+        setExibirModal(true);
     }
 
     const onCancel = () => {
@@ -49,6 +53,14 @@ function Cadastro() {
 
     return (
         <>
+            {exibirModal && (
+                <Modal
+                    titulo={"Confirmacao de Cadastro"}
+                    texto={"Aluno cadastrado com sucesso!"}
+                    onClickBtn02={() => setExibirModal(false)}
+                    txtBtn02={"Fechar"}
+                />
+            )}
             <Cabecalho />
 
             <form className="container mt-3" onSubmit={onSubmit}>
@@ -184,8 +196,8 @@ function Cadastro() {
                             required
                         >
                             <option value="DEFAULT"></option>
-                            {UFs.map((uf) => (
-                                <option value={uf}>{uf}</option>
+                            {UFs.map((uf, idx) => (
+                                <option value={uf} key={idx}>{uf}</option>
                             ))}
                         </select>
                     </div>
