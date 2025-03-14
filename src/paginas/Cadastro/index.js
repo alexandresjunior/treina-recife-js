@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import { UFs } from "../../constantes/ufs";
 import Modal from "../../componentes/Modal";
+import api from "../../servicos/api";
 
 function Cadastro() {
     const [nome, setNome] = useState("");
@@ -44,12 +45,27 @@ function Cadastro() {
         setEmail("");
         setDataNascimento();
         setCep("");
+        setLogradouro("");
         setNumero("");
         setBairro("");
         setCidade("");
         setUf("DEFAULT");
         setComplemento("");
     }
+
+    useEffect(() => {
+        if (cep?.length === 9) {
+            api.get(`${cep}/json`)
+               .then((resposta) => {
+                    setLogradouro(resposta.data.logradouro);
+                    setBairro(resposta.data.bairro);
+                    setCidade(resposta.data.localidade);
+                    setUf(resposta.data.uf);
+               })
+               .catch((erro) => console.log(erro));
+        }
+    }, [cep]);
+
 
     return (
         <>
@@ -128,7 +144,7 @@ function Cadastro() {
                             type="text"
                             className="form-control"
                             id="cep"
-                            placeholder="XX.XXX-XXX"
+                            placeholder="XXXXX-XXX"
                             value={cep}
                             onChange={(e) => setCep(e.target.value)}
                             required
